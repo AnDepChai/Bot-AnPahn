@@ -1,5 +1,5 @@
 # Bot-AnPahn
-- 👋 Hi, Tui là @AnDepChai
+- 👋 Hi, Tui là @Phan Văn An
 * `Lưu ý: Code xấu nên mọi người thông cảm :))`
 - Bây giờ làm sao để bot discord có thể hoạt động mượt mà và trơn tru?
 yeh!
