@@ -16,14 +16,14 @@ yeh!
 - Bước 3:
 * Thêm token bot của bạn và chạy bot thôi!
 
-• Ngoài ra nếu bạn chạy dự án bot tại: [Replit](replit.com) thì hãy thêm đoạn code này vào file ẩn của replit.
-• File tên là "replit.nix"
-• Dưới đây là đoạn mã đó: 
+* Ngoài ra nếu bạn chạy dự án bot tại: [Replit](replit.com) thì hãy thêm đoạn code này vào file ẩn của replit.
+* File tên là "replit.nix"
+* Dưới đây là đoạn mã đó: 
 
 `{ pkgs }: {
   deps = [
-    pkgs.ffmpeg  # Cài đặt ffmpeg
-    pkgs.nodejs-18_x  # Thay thế bằng phiên bản Node.js có sẵn
+    pkgs.ffmpeg
+    pkgs.nodejs-18_x
   ];
 }`
 
