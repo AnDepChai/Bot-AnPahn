@@ -310,7 +310,7 @@ async function handleWaifuCommand(message, command) {
 }
 
 //___
-const botOwnerId = "958668688607838208";
+const botOwnerId = ""; //Thêm id bạn vào để bot trả lời lại bạn
 
 function getRandomResponse(responses) {
   return responses[Math.floor(Math.random() * responses.length)];
