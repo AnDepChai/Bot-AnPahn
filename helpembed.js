@@ -34,7 +34,7 @@ function createHelpEmbed(user) {
       {
         name: "Văn bản: 💬",
         value:
-          "``` • chào, avatar wibu, chó, thằng Otaku, ai hỏi, gà, thằng gà, quê, bạn là nhất, rick roll... (Ví dụ: chào), ```",
+          "``` • hi, (Ví dụ: hi), ```",
       },
       {
         name: "Lệnh: ❗",
