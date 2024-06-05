@@ -51,11 +51,11 @@ const folderPath = "text";
 const fileContents = loadFileContents(folderPath);
 
 //___id kênh
-const allowedChannel = ["1239079798907605092", ""];
+const allowedChannel = ["", ""]; // thêm id kênh để dùng SendEmo.js
 //___id quyền(permission)
-const allowedUserIds = ["958668688607838208", ""];
+const allowedUserIds = ["", ""]; // thêm id bạn vào để dùng Quyền dùng các lệnh administrator 
 //___id quyền lệnh !dungbot
-const authorizedUserIds = ["958668688607838208", ""];
+const authorizedUserIds = ["", ""]; // thêm id bạn vào để dùng Quyền administrator lệnh !dungbot
 
 app.listen(3000, () => {
   console.log("An Pahn Online ✅");
