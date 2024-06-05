@@ -5,4 +5,4 @@
 yeh!
 - Bước 1:
 * Bạn cần thêm 2 emoji này vào máy chủ của bạn.
-  
+  + [ẢNH TẠI ĐÂY](t.co/elon)
