@@ -5,4 +5,4 @@
 yeh!
 - Bước 1:
 * Bạn cần thêm 2 emoji này vào máy chủ của bạn.
-  + [ẢNH TẠI ĐÂY]([![pepeeyes](https://cdn3.emoji.gg/emojis/3389-pepeeyes.png)](https://emoji.gg/emoji/3389-pepeeyes))
+  + [![pepeeyes](https://cdn3.emoji.gg/emojis/3389-pepeeyes.png)](https://emoji.gg/emoji/3389-pepeeyes)
