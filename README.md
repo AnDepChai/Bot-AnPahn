@@ -27,4 +27,7 @@ yeh!
   ];
 }`
 
+*Note:* Vì đây là bot đầu tiên tui viết nên sẽ có các đoạn code xàm và khá vô tri nên mọi người chú ý và có thể sủa  lại nếu muốn! 💀
+
 | Chúc Bạn Thành Công! |
+
