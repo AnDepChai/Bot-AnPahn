@@ -4,7 +4,7 @@
 - Bây giờ làm sao để bot discord có thể hoạt động mượt mà và trơn tru?
 yeh!
 - Bước 1:
-* Bạn cần thêm 2 emoji này vào máy chủ của bạn.
+* Bạn cần thêm 2 emoji này vào máy chủ của bạn. [Có thể không thêm cũng không sao]
 
   [![_pepee_yes](https://cdn3.emoji.gg/emojis/3389-pepeeyes.png)](https://emoji.gg/emoji/3389-pepeeyes)
 
