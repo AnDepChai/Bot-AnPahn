@@ -58,15 +58,15 @@ const allowedUserIds = ["", ""]; // thêm id bạn vào để dùng Quyền dùn
 const authorizedUserIds = ["", ""]; // thêm id bạn vào để dùng Quyền administrator lệnh !dungbot
 
 app.listen(3000, () => {
-  console.log("An Pahn Online ✅");
+  console.log("Bot Đã Hoạt Động!");
 });
 app.get("/", (req, res) => {
-  res.send("Bot By Pahn An - Version v2.5a");
+  res.send("Bot By Phan Văn An!");
 });
 
 client.on("messageCreate", (message) => {
   if (message.content === "ping") {
-    message.channel.send("pong");
+    message.channel.send(`ᴘɪɴɢ ʜɪệɴ ᴛạɪ ʟà: ${client.ws.ping} ᴍs`);
   }
   sendEmo(message, allowedChannel);
   if (ActiveMessage) handleCooldown(message, fileContents);
