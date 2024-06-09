@@ -11,10 +11,10 @@ yeh!
   [![_pepe_no](https://cdn3.emoji.gg/emojis/2439-pepe-no.png)](https://emoji.gg/emoji/2439-pepe-no)
 
 - Bước 2:
-* Thêm API "Youtube data api v3" vào ở file index.js
+* Thêm API "Youtube data api v3" vào ở file index.js [Bắt buộc phải có]
 
 - Bước 3:
-* Thêm token bot của bạn và chạy bot thôi!
+* Thêm token bot của bạn và chạy bot thôi! [Bắt buộc phải có]
 
 * Ngoài ra nếu bạn chạy dự án bot tại: [Replit](replit.com) thì hãy thêm đoạn code này vào file ẩn của replit.
 * File tên là "replit.nix"
