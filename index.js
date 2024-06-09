@@ -365,7 +365,7 @@ client.on("messageCreate", (message) => {
 });
 
 //___
-const youtubeApiKey = "<YOUTUBE_API_DATA_V3";
+const youtubeApiKey = "<YOUTUBE_API_DATA_V3"; //Nhập API Youtube tại đây!
 
 const queue = [];
 let connection = null;
