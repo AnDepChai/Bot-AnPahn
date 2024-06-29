@@ -55,11 +55,12 @@ const folderPath = "text";
 const fileContents = loadFileContents(folderPath);
 
 //___id kênh sendemoji
-const allowedChannel = ["1239079798907605092",             "1255417420810555392",
+const allowedChannel = ["",             
+ "",
  "",
 ];
 //___quyền id lệnh administrator
-const allowedUserIds = ["958668688607838208",
+const allowedUserIds = ["",
  "",
 ];
 //___id quyền lọc chửi thề và spam
@@ -693,7 +694,7 @@ client.on("messageCreate", (message) => {
 
 
 //___
-const youtubeApiKey = "AIzaSyD6WYgtRPv2CQAYgRX7kpVKJ6-_Pu36nRk";
+const youtubeApiKey = "API_YOUTUBE_DATA_V3";
 
 const queue = [];
 let connection = null;
