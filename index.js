@@ -409,7 +409,7 @@ function createEmbed(
       iconURL: authorAvatarURL,
     })
     .setDescription(
-      `📨 ᴛɪɴ ɴʜắɴ ᴄủᴀ ʙạɴ:\n${content}\n\n[Discord DuySuy!](https://discord.com/invite/8aSjybNe9E)\n[Discord MineMelon!](https://discord.com/invite/N69NSdSU3Z)`,
+      `📨 ᴛɪɴ ɴʜắɴ ᴄủᴀ ʙạɴ:\n${content}\n\n[Discord AnPahn!](https://discord.com/invite/8aSjybNe9E)`,
     )
     .setFooter({
       text: `© ᴄᴏᴅᴇ ʙʏ ᴀɴ ᴘᴀʜɴ 🐧 | Đếᴍ ᴛɪɴ ɴʜắɴ: ${messageCount}`,
