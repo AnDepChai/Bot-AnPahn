@@ -139,7 +139,9 @@ function createActionRow() {
 
 module.exports = registerHelpCommand;
 
-/*
+
+// Code /help cũ trước khi update lên /help mới như code trên.
+/* 
 const { EmbedBuilder } = require("discord.js");
 
 function registerHelpCommand(client) {
