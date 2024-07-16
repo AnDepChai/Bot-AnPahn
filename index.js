@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const axios = require("axios");
+//const axios = require("axios");
 const express = require("express");
 const {
   ActionRowBuilder,
@@ -27,10 +27,12 @@ const {
   NoSubscriberBehavior,
   joinVoiceChannel,
 } = require("@discordjs/voice");
-const ytdl = require("ytdl-core");
+const fs = require("fs");
+const ytdl = require("@distube/ytdl-core");
 const { google } = require("googleapis");
 const youtube = google.youtube("v3");
 const youtubeSearch = require("youtube-search");
+
 //___
 var ActiveMessage = true;
 
@@ -55,28 +57,25 @@ const folderPath = "text";
 const fileContents = loadFileContents(folderPath);
 
 //___id kênh sendemoji
-const allowedChannel = ["",             
- "",
- "",
-];
+const allowedChannel = ["", "", ""];
 //___quyền id lệnh administrator
-const allowedUserIds = ["",
- "",
-];
+const allowedUserIds = ["", ""];
 //___id quyền lọc chửi thề và spam
+/*
 const allowedUserIds2 = ["",
  "",
  "",
  "",
  "",
-];
+]; // tạm dừng
+*/
 
 app.listen(3000, () => {
   console.log("An Pahn Online ✅");
   client.uptimeStart = Date.now();
 });
 app.get("/", (req, res) => {
-  res.send("Bot By Pahn An - Version v2.7a");
+  res.send("Bot By Pahn An - Version v3.0.0");
 });
 
 client.on("messageCreate", (message) => {
@@ -101,6 +100,7 @@ client.on("messageCreate", async (message) => {
         { name: "Độ ᴛʀễ ʙᴏᴛ:", value: `${botLatency} ᴍs` },
         { name: "Độ ᴛʀễ ᴀᴘɪ:", value: `${apiLatency} ᴍs` },
       )
+      .setThumbnail(client.user.displayAvatarURL())
       .setTimestamp();
 
     await message.channel.send({ embeds: [embed] });
@@ -146,40 +146,6 @@ client.on("messageCreate", async (message) => {
 });
 
 //___
-client.on("messageCreate", async (message) => {
-  if (message.author.bot) return;
-
-  const content = message.content.trim().split(/ +/);
-  const command = content[0].toLowerCase();
-  const args = content.slice(1);
-
-  if (command === "!dungbot") {
-    if (!allowedUserIds.includes(message.author.id)) {
-      const noPermissionEmbed = new EmbedBuilder()
-        .setColor("#ff0000")
-        .setTitle("⚠️ ǫᴜʏềɴ ʜạɴ ᴋʜôɴɢ đủ ⚠️")
-        .setDescription("❎ ʙạɴ ᴋʜôɴɢ ᴄó ǫᴜʏềɴ sử ᴅụɴɢ ʟệɴʜ ɴàʏ.");
-
-      await message.channel.send({ embeds: [noPermissionEmbed] });
-      return;
-    }
-
-    const embed = new EmbedBuilder()
-      .setTitle("[ᴛʜôɴɢ ʙáᴏ ᴄậᴘ ɴʜậᴛ ʙᴏᴛ 🤖]")
-      .setDescription(
-        "• ʙᴏᴛ ʜɪệɴ ᴛạɪ đᴀɴɢ ᴅừɴɢ ʜᴏạᴛ độɴɢ 🔒 \n• ʙᴏᴛ sẽ ʜᴏạᴛ độɴɢ ʟạɪ sᴀᴜ ᴋʜɪ ǫᴜá ᴛʀìɴʜ ᴄậᴘ ɴʜậᴛ ʜᴏàɴ ᴛấᴛ 🔓"
-      )
-      .setColor("#ff0000")
-      .setFooter({ text: "© ᴄᴏᴅᴇ ʙʏ ᴀɴ ᴘᴀʜɴ 🐧" })
-      .setImage("https://share.creavite.co/667fa87da4acd93e52346f5a.gif")
-      .setTimestamp();
-
-    await message.channel.send({ embeds: [embed] });
-    process.exit();
-  }
-});
-
-//___
 client.on("ready", () => {
   ActiveSlash();
 });
@@ -197,6 +163,11 @@ function ActiveSlash() {
         description: "HIỆN TẤT CẢ CÁC LỆNH CÓ THỂ DÙNG ĐƯỢC.",
         options: [],
       },
+      {
+        name: "dungbot",
+        description: "TẮT BOT & CẬP NHẬT BOT.",
+        options: [],
+      },
     ];
     rest
       .put(Discord.Routes.applicationCommands(client.user.id), {
@@ -205,26 +176,63 @@ function ActiveSlash() {
       .catch(console.error);
 
     client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
+      if (!interaction.isCommand()) return;
 
-  if (interaction.commandName === "txt") {
-    const userId = interaction.user.id;
-    if (allowedUserIds.includes(userId)) {
-      ActiveMessage = !ActiveMessage;
-      await interaction.reply(
-        `Trả Lời Tin Nhắn: ${ActiveMessage ? "Bật" : "Tắt"}`
-      );
-    } else {
-      const noPermissionEmbed = new EmbedBuilder()
-        .setColor("#ff0000")
-        .setTitle("⚠️ ǫᴜʏềɴ ʜạɴ ᴋʜôɴɢ đủ ⚠️")
-        .setDescription("❎ ʙạɴ ᴋʜôɴɢ ᴄó ǫᴜʏềɴ sử ᴅụɴɢ ʟệɴʜ ɴàʏ.");
+      if (interaction.commandName === "txt") {
+        const userId = interaction.user.id;
+        if (allowedUserIds.includes(userId)) {
+          ActiveMessage = !ActiveMessage;
 
-      await interaction.reply({ embeds: [noPermissionEmbed] });
-      return;
-    }
-  }
-});
+          const statusEmbed = new EmbedBuilder()
+            .setColor(ActiveMessage ? "#00ff00" : "#ff0000")
+            .setDescription(
+              `ᴛɪɴ ɴʜắɴ ᴛự độɴɢ: ${ActiveMessage ? "ʙậᴛ" : "ᴛắᴛ"}`,
+            );
+
+          await interaction.reply({ embeds: [statusEmbed] });
+        } else {
+          const noPermissionEmbed = new EmbedBuilder()
+            .setColor("#ff0000")
+            .setTitle("⚠️ ǫᴜʏềɴ ʜạɴ ᴋʜôɴɢ đủ ⚠️")
+            .setDescription("❎ ʙạɴ ᴋʜôɴɢ ᴄó ǫᴜʏềɴ sử ᴅụɴɢ ʟệɴʜ ɴàʏ.");
+
+          await interaction.reply({ embeds: [noPermissionEmbed] });
+        }
+      }
+    });
+    client.on("interactionCreate", async (interaction) => {
+      if (!interaction.isCommand()) return;
+
+      const { commandName, user } = interaction;
+
+      if (commandName === "dungbot") {
+        if (!allowedUserIds.includes(user.id)) {
+          const noPermissionEmbed = new EmbedBuilder()
+            .setColor("#ff0000")
+            .setTitle("⚠️ ǫᴜʏềɴ ʜạɴ ᴋʜôɴɢ đủ ⚠️")
+            .setDescription("❎ ʙạɴ ᴋʜôɴɢ ᴄó ǫᴜʏềɴ sử ᴅụɴɢ ʟệɴʜ ɴàʏ.");
+
+          await interaction.reply({
+            embeds: [noPermissionEmbed],
+            ephemeral: true,
+          });
+          return;
+        }
+
+        const embed = new EmbedBuilder()
+          .setTitle("ᴛʜôɴɢ ʙáᴏ ᴄậᴘ ɴʜậᴛ ʙᴏᴛ 🤖")
+          .setDescription(
+            "• ʙᴏᴛ ʜɪệɴ ᴛạɪ đᴀɴɢ ᴅừɴɢ ʜᴏạᴛ độɴɢ 🔒 \n• ʙᴏᴛ sẽ ʜᴏạᴛ độɴɢ ʟạɪ sᴀᴜ ᴋʜɪ ǫᴜá ᴛʀìɴʜ ᴄậᴘ ɴʜậᴛ ʜᴏàɴ ᴛấᴛ 🔓",
+          )
+          .setColor("#ff0000")
+          .setFooter({ text: "© ᴄᴏᴅᴇ ʙʏ ᴀɴ ᴘᴀʜɴ 🐧" })
+          .setImage("https://share.creavite.co/667fa87da4acd93e52346f5a.gif")
+          .setTimestamp();
+
+        await interaction.reply({ embeds: [embed] });
+        process.exit();
+      }
+    });
   } catch (e) {
     console.log(e);
   }
@@ -245,7 +253,7 @@ client.on("messageCreate", async (message) => {
       user = await client.users.fetch(userId).catch(() => null);
     } else {
       await message.reply(
-        "ʜãʏ ɴʜậᴘ 'ɪᴅ' ʜᴏặᴄ ''@ᴍᴇɴᴛɪᴏɴ' ɴɢườɪ ᴅùɴɢ để ʟấʏ ᴀᴠᴀᴛᴀʀ.",
+        "ʜãʏ ɴʜậᴘ 'ɪᴅ' ʜᴏặᴄ '@ᴍᴇɴᴛɪᴏɴ ɴɢườɪ ᴅùɴɢ để ʟấʏ ᴀᴠᴀᴛᴀʀ.",
       );
       return;
     }
@@ -389,8 +397,8 @@ client.on("messageCreate", (message) => {
 });
 
 //___
-let channelAId = "";
-let channelBId = "";
+let channelAId = ""; //Thêm mặc định
+let channelBId = ""; //Thêm mặc định
 let recentMessages = {};
 let messageCount = 0;
 
@@ -409,7 +417,7 @@ function createEmbed(
       iconURL: authorAvatarURL,
     })
     .setDescription(
-      `📨 ᴛɪɴ ɴʜắɴ ᴄủᴀ ʙạɴ:\n${content}\n\n[Discord AnPahn!](https://discord.com/invite/8aSjybNe9E)`,
+      `📨 ᴛɪɴ ɴʜắɴ ᴄủᴀ ʙạɴ:\n${content}\n\n[Discord Bot](https://discord.com/invite/8aSjybNe9E)`,
     )
     .setFooter({
       text: `© ᴄᴏᴅᴇ ʙʏ ᴀɴ ᴘᴀʜɴ 🐧 | Đếᴍ ᴛɪɴ ɴʜắɴ: ${messageCount}`,
@@ -511,100 +519,20 @@ client.on("messageCreate", (message) => {
 });
 
 //___
+
+// Tạm dừng
+/*
+const WARNING_CHANNEL_ID = ''; // id kênh xem log
+
 const antiSpam = new Map();
 const spamTracker = new Map();
 const SPAM_THRESHOLD = 5;
 const SPAM_DURATION = 10000;
 const RESET_DURATION = 30000; // 30 giây
-const PROFANITY = ["cl", "cc", "cặc", "đéo", "dume", "đụ má", "djt", "cailonma", "cái lồn", "lồn", "địt", "địt mẹ", "đjt", 
-"motherfucker", "bitch", "shit", "asshole", "pussy", "whore", "slut", "dick", "cock", "nigger", "faggot", "chink", 
-"kike", "spic", "wetback", "cunt", "twat", "bugger", "bollocks", "arse", "tosser", "wanker", "bastard", "bloody", 
-"damn", "hell", "balls", "bullshit", "crap", "darn", "douche", "freak", "frick", "jerk", "prick", "suck", "turd", 
-"blowjob", "handjob", "spank", "spunk", "poontang", "piss", "pussyhole", "fuckface", "shithead",
-"mẹ kiếp", "đồ chó", "ngu", "chết tiệt", "thằng khốn", "đĩ", "bòi", "búa xua", "ba trợn", "dơ dáng", "đồ rác", 
-"câm mồm", "khốn nạn", "con hoang", "con lợn", "mẹ mày", "thằng chó", "vãi đái", "vãi lồn", "đồ khốn nạn", 
-"đồ lợn", "đồ phản bội", "đồ ngu", "mày điên à", "đồ đĩ", "đồ đĩ thõa", "mất dạy", "đồ chết tiệt",
-]; // các từ cần lọc vào đây
-const ALLOWED_WORDS = [
-  "acc","access", "account", "accurate","hello", "accomplish", "according", "acknowledge", "acquire", "active", "activity", 
-  "actually", "addition", "address", "adjust", "admit", "advance", "advantage", "advertise", "advice", "advise", "affect", 
-  "afford", "after", "again", "against", "age", "agency", "agent", "ago", "agree", "agreement", "ahead", "air", "all", 
-  "allow", "almost", "alone", "along", "already", "also", "although", "always", "amaze", "amazing", "among", "amount", 
-  "analysis", "ancient", "and", "anger", "angle", "animal", "announce", "another", "answer", "anxiety", "any", "anybody", 
-  "anymore", "anyone", "anything", "anyway", "apart", "apartment", "apologize", "apparent", "appeal", "appear", "appearance", 
-  "apple", "application", "apply", "appoint", "appointment", "appreciate", "approach", "appropriate", "approval", "approve", 
-  "approximate", "area", "argue", "argument", "arise", "arm", "around", "arrange", "arrangement", "arrest", "arrival", 
-  "arrive", "art", "article", "artist", "as", "aside", "ask", "asleep", "aspect", "ass", "assemble", "assembly", "assess", 
-  "assessment", "assign", "assignment", "assist", "assistance", "assistant", "associate", "association", "assume", 
-  "assumption", "assure", "at", "athlete", "atmosphere", "attach", "attack", "attempt", "attend", "attention", "attitude", 
-  "attorney", "attract", "attraction", "attractive", "attribute", "audience", "author", "authority", "available", 
-  "average", "avoid", "award", "aware", "awareness", "away", "awful", "baby", "back", "background", "bad", "badly", 
-  "bag", "balance", "ball", "ban", "band", "bank", "bar", "barely", "barrel", "base", "baseball", "basic", "basically", 
-  "basis", "basket", "basketball", "bath", "bathroom", "battery", "battle", "be", "beach", "bean", "bear", "beat", "beautiful", 
-  "beauty", "because", "become", "bed", "bedroom", "bee", "beef", "beer", "before", "began", "begin", "beginning", "behavior", 
-  "behind", "being", "belief", "believe", "bell", "belong", "below", "belt", "bench", "bend", "benefit", "beside", "besides", 
-  "best", "bet", "better", "between", "beyond", "bicycle", "big", "bike", "bill", "billion", "bind", "biological", "bird", 
-  "birth", "birthday", "bit", "bite", "black", "blame", "blanket", "blind", "block", "blood", "blow", "blue", "board", 
-  "boat", "body", "bomb", "bond", "bone", "book", "boom",]; // các từ ko đc lọc
-/*
-client.on("messageCreate", (message) => {
-  if (message.author.bot) return;
 
-  if (!antiSpam.has(message.author.id)) {
-    antiSpam.set(message.author.id, []);
-  }
+const PROFANITY = ["Thêm vào đây"]; // các từ cần lọc vào đây
 
-  const userMessages = antiSpam.get(message.author.id);
-  userMessages.push(Date.now());
-
-  const timeFrame = userMessages.filter(
-    (timestamp) => Date.now() - timestamp < SPAM_DURATION,
-  );
-
-  if (timeFrame.length > SPAM_THRESHOLD) {
-    const spamEmbed = new EmbedBuilder()
-      .setColor("#ff0000")
-      .setTitle("[ᴄảɴʜ ʙáᴏ sᴘᴀᴍ]")
-      .setDescription(
-        `${message.author}, ʙạɴ đᴀɴɢ sᴘᴀᴍ, ᴠᴜɪ ʟòɴɢ ᴄʜᴀᴛ ᴄʜậᴍ ʟạɪ!`,
-      )
-      .setFooter({ text: "© ᴄᴏᴅᴇ ʙʏ ᴀɴ ᴘᴀʜɴ 🐧" })
-      .setTimestamp();
-
-    message.channel.send({ embeds: [spamEmbed] }).then((sentMessage) => {
-      setTimeout(() => sentMessage.delete().catch(console.error), 2000);
-    });
-    message.delete().catch(console.error);
-    antiSpam.set(message.author.id, timeFrame);
-    return;
-  }
-
-  for (const word of PROFANITY) {
-    if (
-      message.content.toLowerCase().includes(word) &&
-      !ALLOWED_WORDS.some((allowedWord) => message.content.toLowerCase().includes(allowedWord))
-    ) {
-      message.delete().catch(console.error);
-
-      const profanityEmbed = new EmbedBuilder()
-        .setColor("#ff0000")
-        .setTitle("[ᴄảɴʜ ʙáᴏ ɴɢôɴ ᴛừ]")
-        .setDescription(
-          `${message.author}, ʜãʏ ᴄʜú ý ɴɢôɴ ᴛừ, ʙìɴʜ ᴛĩɴʜ ɴàᴏ ʙạɴ ơɪ!`,
-        )
-        .setFooter({ text: "© ᴄᴏᴅᴇ ʙʏ ᴀɴ ᴘᴀʜɴ 🐧" })
-        .setTimestamp();
-
-      message.channel.send({ embeds: [profanityEmbed] }).then((sentMessage) => {
-        setTimeout(() => sentMessage.delete().catch(console.error), 2000);
-      });
-      return;
-    }
-  }
-});
-*/
-
-
+const ALLOWED_WORDS = ["Thêm vào đây"]; // các từ ko đc lọc
 
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
@@ -634,9 +562,30 @@ client.on("messageCreate", (message) => {
       .setTimestamp();
 
     message.channel.send({ embeds: [spamEmbed] }).then((sentMessage) => {
-      setTimeout(() => sentMessage.delete().catch(console.error), 2000);
+      setTimeout(() => {
+        sentMessage.delete().catch((err) => {
+          if (err.code !== 10008) {
+            console.error(err);
+          }
+        });
+      }, 2000);
     });
-    message.delete().catch(console.error);
+    message.delete().catch((err) => {
+      if (err.code !== 10008) {
+        console.error(err);
+      }
+    });
+
+    const warningEmbed = new EmbedBuilder()
+      .setColor("#ff0000")
+      .setTitle("[🔔 ʟᴏɢ ᴄẢɴʜ ᴄÁᴏ]")
+      .setDescription(`${message.author.tag} Đã ʙị ᴄảɴʜ ᴄáᴏ ᴠì sᴘᴀᴍ!`)
+      .setTimestamp();
+
+    const warningChannel = client.channels.cache.get(WARNING_CHANNEL_ID);
+    if (warningChannel) {
+      warningChannel.send({ embeds: [warningEmbed] });
+    }
 
     antiSpam.set(userId, timeFrame);
 
@@ -649,10 +598,16 @@ client.on("messageCreate", (message) => {
   for (const word of PROFANITY) {
     if (
       message.content.toLowerCase().includes(word) &&
-      !ALLOWED_WORDS.some((allowedWord) => message.content.toLowerCase().includes(allowedWord)) &&
+      !ALLOWED_WORDS.some((allowedWord) =>
+        message.content.toLowerCase().includes(allowedWord),
+      ) &&
       !isAllowedUser
     ) {
-      message.delete().catch(console.error);
+      message.delete().catch((err) => {
+        if (err.code !== 10008) {
+          console.error(err);
+        }
+      });
 
       const profanityEmbed = new EmbedBuilder()
         .setColor("#ff0000")
@@ -664,8 +619,25 @@ client.on("messageCreate", (message) => {
         .setTimestamp();
 
       message.channel.send({ embeds: [profanityEmbed] }).then((sentMessage) => {
-        setTimeout(() => sentMessage.delete().catch(console.error), 2000);
+        setTimeout(() => {
+          sentMessage.delete().catch((err) => {
+            if (err.code !== 10008) {
+              console.error(err);
+            }
+          });
+        }, 2000);
       });
+
+      const warningEmbed = new EmbedBuilder()
+        .setColor("#ff0000")
+        .setTitle("[🔔 ʟᴏɢ ᴄẢɴʜ ᴄÁᴏ]")
+        .setDescription(`${message.author.tag} Đã ʙị ᴄảɴʜ ᴄáᴏ ᴠì ᴅùɴɢ ɴɢôɴ ᴛừ ᴋʜôɴɢ ᴘʜù ʜợᴘ!`)
+        .setTimestamp();
+
+      const warningChannel = client.channels.cache.get(WARNING_CHANNEL_ID);
+      if (warningChannel) {
+        warningChannel.send({ embeds: [warningEmbed] });
+      }
 
       if (isAllowedUser) {
         spamTracker.set(userId, Date.now());
@@ -682,19 +654,11 @@ client.on("messageCreate", (message) => {
     }
   }
 });
-
-
-
-
-
-
-
-
-
-
+*/
 
 //___
-const youtubeApiKey = "API_YOUTUBE_DATA_V3";
+
+const youtubeApiKey = "API_KEY_YOUTUBE_DATA_V3";
 
 const queue = [];
 let connection = null;
@@ -770,29 +734,6 @@ async function playNextSong() {
   }
 }
 
-/*
-function startIdleTimeout() {
-  if (idleTimeout) clearTimeout(idleTimeout);
-
-  idleTimeout = setTimeout(async () => {
-    if (!isPlaying && connection) {
-      connection.disconnect();
-      connection = null;
-      queue.length = 0;
-      if (textChannel) {
-        const embed = new EmbedBuilder()
-          .setDescription(
-            "ʙᴏᴛ đã ᴛự độɴɢ ʀờɪ ᴋʜỏɪ ᴠᴏɪᴄᴇ ᴄʜᴀɴɴᴇʟ. \n \n- ᴅᴏ ᴋʜôɴɢ ᴘʜáᴛ ʙàɪ ɴʜạᴄ ɴàᴏ ᴛʀᴏɴɢ 𝟹 ᴘʜúᴛ. \n- ᴛʀáɴʜ ᴛʀᴇᴏ ʙᴏᴛ ɴêɴ <@958668688607838208> ʟàᴍ ɴʜư ᴛʜế ɴàʏ.",
-          )
-          .setColor("#ff0000");
-
-        await textChannel.send({ embeds: [embed] });
-      }
-    }
-  }, 180000); // 3 phút = 180000
-}
-*/
-
 function startIdleTimeout() {
   if (idleTimeout) clearTimeout(idleTimeout);
 
@@ -848,7 +789,7 @@ client.on("messageCreate", async (message) => {
       guildId: userVoiceChannel.guild.id,
       adapterCreator: userVoiceChannel.guild.voiceAdapterCreator,
     });
-
+   
     // Phát âm thanh khi bot kết nối vào voice channel
     const joinSound = createAudioResource("girl-uwu.mp3");
     const joinPlayer = createAudioPlayer();
@@ -863,8 +804,9 @@ client.on("messageCreate", async (message) => {
   }
 
   if (
-    content.startsWith("!leavev") || content.startsWith("!lv") ||
-content.startsWith(`<@${client.user.id}> leavev`)
+    content.startsWith("!leavev") ||
+    content.startsWith("!lv") ||
+    content.startsWith(`<@${client.user.id}> leavev`)
   ) {
     if (connection) {
       connection.disconnect();
@@ -946,7 +888,7 @@ content.startsWith(`<@${client.user.id}> leavev`)
         results.forEach((result, index) => {
           embed.addFields({
             name: `${index + 1}. ${result.title}`,
-            value: `ʟɪɴᴋ ɴʜạᴄ: ${result.link}`,         
+            value: `ʟɪɴᴋ ɴʜạᴄ: ${result.link}`,
           });
         });
 
@@ -976,8 +918,7 @@ content.startsWith(`<@${client.user.id}> leavev`)
         const replyMessage = await message.channel.send({
           embeds: [embed],
           components: [actionRow],
-          content:
-            "ᴠᴜɪ ʟòɴɢ ᴄʜọɴ ʙàɪ ʜáᴛ ʙằɴɢ ᴄáᴄʜ ʙấᴍ ᴠàᴏ ɴúᴛ ᴛừ '𝟷' đếɴ '𝟻'!",
+          content: "ᴠᴜɪ ʟòɴɢ ᴄʜọɴ ʙàɪ ʜáᴛ ʙằɴɢ ᴄáᴄʜ ʙấᴍ ᴠàᴏ ɴúᴛ ᴛừ <𝟷> đếɴ <𝟻>",
         });
 
         const timeout = setTimeout(async () => {
@@ -986,7 +927,6 @@ content.startsWith(`<@${client.user.id}> leavev`)
               await replyMessage.delete();
             } catch (error) {
               if (error.code !== 10008) {
-                console.error("Lỗi khi xóa tin nhắn:", error);
               }
             }
           }
@@ -1009,7 +949,6 @@ content.startsWith(`<@${client.user.id}> leavev`)
           time: 15000,
         });
 
-        //
         collector.on("collect", async (interaction) => {
           collector.stop();
           const choiceIndex =
@@ -1048,7 +987,6 @@ content.startsWith(`<@${client.user.id}> leavev`)
                 await replyMessage.delete();
               } catch (error) {
                 if (error.code !== 10008) {
-                  console.error("Lỗi khi xóa tin nhắn:", error);
                 }
               }
             }
@@ -1056,14 +994,11 @@ content.startsWith(`<@${client.user.id}> leavev`)
           clearTimeout(timeout);
         });
       } catch (error) {
-        console.error("Đã xảʏ ʀᴀ ʟỗɪ ᴋʜɪ ᴛìᴍ ᴋɪếᴍ ɴʜạᴄ:", error);
-        await message.channel.send(
-          "Đã xảʏ ʀᴀ ʟỗɪ ᴋʜɪ ᴛìᴍ ᴋɪếᴍ ɴʜạᴄ.",
-        );
+        await message.channel.send("Đã xảʏ ʀᴀ ʟỗɪ ᴋʜɪ ᴛìᴍ ᴋɪếᴍ ɴʜạᴄ.");
       }
     }
   }
-
+  
   if (
     content.startsWith("!quabai") ||
     content.startsWith("!qb") ||
@@ -1121,34 +1056,19 @@ content.startsWith(`<@${client.user.id}> leavev`)
     }
   }
 
-  if (
-    content.startsWith("!laplainhac") ||
+  if (content.startsWith("!laplainhac") ||
     content.startsWith("!lln") ||
     content.startsWith(`<@${client.user.id}> laplainhac`)
   ) {
-    isLooping = true;
+    isLooping = !isLooping;
     const embed = new EmbedBuilder()
-      .setDescription("ʟặᴘ ʟạɪ ɴʜạᴄ | Đã Bật.")
-      .setColor("#00ff00");
-    await message.channel.send({ embeds: [embed] });
-  }
-
-  if (
-    content.startsWith("!dunglaplai") ||
-    content.startsWith("!dll") ||
-    content.startsWith(`<@${client.user.id}> dunglaplai`)
-  ) {
-    isLooping = false;
-    const embed = new EmbedBuilder()
-      .setDescription("ʟặᴘ ʟạɪ ɴʜạᴄ | Đã Tắt.")
-      .setColor("#00ff00");
+      .setDescription(`ʟặᴘ ʟạɪ ɴʜạᴄ | Đã ${isLooping ? "Bật" : "Tắt"}.`)
+      .setColor(isLooping ? "#00ff00" : "#ff0000");
     await message.channel.send({ embeds: [embed] });
   }
 });
+
 //___
-
-
-
 
 
 
