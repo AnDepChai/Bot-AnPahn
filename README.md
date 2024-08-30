@@ -29,7 +29,9 @@ yeh!
 
 - Dán các API và Token vào để dùng.
 token = TOKEN_BOT_DISCORD
+
 VIRUSTOTAL_API_KEY = API_VIRUSTOTAL
+
 NASA_API_KEY = API_NASA
 
 
