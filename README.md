@@ -27,6 +27,12 @@ yeh!
   ];
 }`
 
+- Dán các API và Token vào để dùng.
+token = TOKEN_BOT_DISCORD
+VIRUSTOTAL_API_KEY = API_VIRUSTOTAL
+NASA_API_KEY = API_NASA
+
+
 *Note:* Vì đây là bot đầu tiên tui viết nên sẽ có các đoạn code xàm và khá vô tri nên mọi người chú ý và có thể sủa  lại nếu muốn! 💀
 
 | Chúc Bạn Thành Công! |
