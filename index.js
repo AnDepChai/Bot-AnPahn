@@ -916,8 +916,7 @@ client.on("messageCreate", (message) => {
 */
 //___
 
-const youtubeApiKey = "AIzaSyB5kahXDrdMynCN13IXwoPRG32HIA9Zj28";
-//"AIzaSyD6WYgtRPv2CQAYgRX7kpVKJ6-_Pu36nRk";
+const youtubeApiKey = "";
 
 const queue = [];
 let connection = null;
